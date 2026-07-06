@@ -9,38 +9,52 @@
   :root {
     --cream:#FBF6EC; --paper:#FFFFFF; --bark:#3B2E22; --bark-soft:#6B5D4B;
     --gold:#C9862B; --gold-deep:#A76B18; --gold-pale:#F6EAD3;
-    --leaf:#4A6B4F; --leaf-pale:#E4EDE4; --apple:#B8402F; --apple-pale:#F7E4E0;
-    --line:#EADFCB;
+    --leaf:#4A6B4F; --leaf-deep:#2F4A33; --leaf-pale:#E4EDE4;
+    --apple:#B8402F; --apple-pale:#F7E4E0; --line:#EADFCB;
   }
   * { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
   body { background:var(--cream); color:var(--bark); font-family:Inter,-apple-system,sans-serif; min-height:100vh; }
   .wrap { max-width:520px; margin:0 auto; padding-bottom:90px; }
 
-  header { position:sticky; top:0; z-index:10; background:var(--cream); border-bottom:1.5px solid var(--line);
-    padding:16px 20px 14px; display:flex; align-items:center; justify-content:space-between; }
-  .brand { font-family:Fraunces,serif; font-weight:900; font-size:20px; line-height:1; }
+  header { position:sticky; top:0; z-index:10; background:var(--leaf-deep);
+    padding:14px 20px; display:flex; align-items:center; gap:12px;
+    box-shadow:0 2px 10px rgba(47,74,51,.25); }
+  .brand { font-family:Fraunces,serif; font-weight:900; font-size:19px; line-height:1.05; color:#F6EAD3; }
   .brand span { color:var(--gold); }
-  .tag { font-size:11px; color:var(--bark-soft); letter-spacing:.04em; margin-top:3px; }
-  .hdr-left { display:flex; align-items:center; gap:12px; }
-
+  .tag { font-size:10.5px; color:#BFCDbf; letter-spacing:.14em; margin-top:3px; text-transform:uppercase; }
   .btn { border:none; cursor:pointer; font-family:Inter,sans-serif; font-weight:700; }
-  .btn-back { width:36px; height:36px; border-radius:50%; background:var(--paper); border:1.5px solid var(--line);
-    color:var(--bark); font-size:16px; }
-  .btn-add { width:44px; height:44px; border-radius:50%; background:var(--gold); color:#fff; font-size:26px;
-    box-shadow:0 4px 12px rgba(201,134,43,.4); }
-  .btn-primary { width:100%; padding:15px; border-radius:14px; background:var(--gold); color:#fff; font-size:16px; }
-  .btn-primary:disabled { background:var(--bark-soft); }
+  .btn-back { width:36px; height:36px; border-radius:50%; background:rgba(255,255,255,.12);
+    border:1.5px solid rgba(255,255,255,.25); color:#F6EAD3; font-size:16px; flex-shrink:0; }
+  .btn-primary { width:100%; padding:15px; border-radius:14px; background:var(--gold); color:#fff; font-size:16px;
+    box-shadow:0 4px 14px rgba(201,134,43,.35); }
+  .btn-primary:disabled { background:var(--bark-soft); box-shadow:none; }
   .btn-ghost { padding:15px 20px; border-radius:14px; background:var(--paper); color:var(--bark-soft);
     border:1.5px solid var(--line); font-weight:600; }
 
   .page { padding:16px 20px; }
   h2 { font-family:Fraunces,serif; font-weight:900; font-size:26px; margin-bottom:6px; }
 
+  /* home */
+  .hero { text-align:center; padding:30px 20px 8px; }
+  .hero svg { width:92px; height:92px; }
+  .hero-title { font-family:Fraunces,serif; font-weight:900; font-size:30px; line-height:1.05; margin-top:10px; }
+  .hero-title span { color:var(--gold); }
+  .hero-sub { font-size:11px; letter-spacing:.22em; color:var(--bark-soft); text-transform:uppercase; margin-top:6px; }
+  .tiles { padding:22px 20px; display:flex; flex-direction:column; gap:14px; }
+  .tile { display:flex; align-items:center; gap:16px; text-align:left; padding:20px 18px; border-radius:20px;
+    border:1.5px solid var(--line); background:var(--paper); box-shadow:0 3px 12px rgba(59,46,34,.07); }
+  .tile-big { background:linear-gradient(135deg, var(--gold) 0%, var(--gold-deep) 100%); border:none;
+    box-shadow:0 6px 18px rgba(201,134,43,.4); }
+  .tile-big .t-name { color:#fff; } .tile-big .t-sub { color:#F6EAD3; }
+  .t-icon { width:46px; height:46px; flex-shrink:0; }
+  .t-name { font-family:Fraunces,serif; font-weight:900; font-size:20px; color:var(--bark); }
+  .t-sub { font-size:12.5px; color:var(--bark-soft); margin-top:2px; }
+
   .search { width:100%; padding:12px 18px; border-radius:999px; border:1.5px solid var(--line);
     background:var(--paper); font-size:16px; margin-bottom:14px; outline:none; }
 
   .card { background:var(--paper); border:1.5px solid var(--line); border-radius:16px; padding:15px; margin-bottom:11px;
-    width:100%; text-align:left; display:block; }
+    width:100%; text-align:left; display:block; box-shadow:0 2px 8px rgba(59,46,34,.05); }
   .card-name { font-family:Fraunces,serif; font-weight:700; font-size:18px; }
   .card-sub { font-size:13px; color:var(--bark-soft); margin-top:2px; }
   .card-meta { font-size:12px; color:var(--bark-soft); margin-top:5px; }
@@ -53,25 +67,25 @@
   .chip-mute { background:#F1EDE4; color:var(--bark-soft); }
 
   label.field { display:block; margin-bottom:15px; }
-  label.field .lbl { display:block; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.08em;
+  label.field .lbl, .lbl2 { display:block; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.08em;
     color:var(--bark-soft); margin-bottom:5px; }
-  input, textarea, select { width:100%; padding:12px 14px; border-radius:12px; border:1.5px solid var(--line);
+  input, textarea { width:100%; padding:12px 14px; border-radius:12px; border:1.5px solid var(--line);
     background:var(--paper); font-size:16px; font-family:Inter,sans-serif; color:var(--bark); outline:none; }
   textarea { min-height:90px; resize:vertical; }
 
   .type-row { display:flex; gap:8px; flex-wrap:wrap; }
-  .type-btn { padding:9px 16px; border-radius:999px; font-size:14px; font-weight:600; border:1.5px solid var(--line);
+  .type-btn { padding:9px 14px; border-radius:999px; font-size:14px; font-weight:600; border:1.5px solid var(--line);
     background:var(--paper); color:var(--bark-soft); }
   .type-btn.on { background:var(--leaf); border-color:var(--leaf); color:#fff; }
 
   .order-box { background:var(--gold-pale); border:1.5px solid var(--line); border-radius:16px; padding:15px; margin-bottom:15px; }
   .order-box .lbl { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--gold-deep); margin-bottom:12px; }
+  .fl-group { font-size:10.5px; font-weight:700; letter-spacing:.1em; color:var(--gold-deep); margin:8px 0 5px; }
   .stepper { display:flex; align-items:center; gap:12px; margin-bottom:8px; }
   .stepper button { width:40px; height:40px; border-radius:50%; font-size:20px; font-weight:700; border:none; }
   .step-minus { background:#fff; color:var(--gold-deep); border:1.5px solid var(--line) !important; }
   .step-plus { background:var(--gold); color:#fff; }
   .step-val { font-family:Fraunces,serif; font-weight:900; font-size:22px; width:44px; text-align:center; }
-  .step-unit { font-size:13px; color:var(--bark-soft); }
 
   .followup { width:100%; padding:13px; border-radius:14px; font-size:14px; font-weight:600; margin-bottom:15px;
     background:var(--paper); color:var(--bark-soft); border:1.5px solid var(--line); }
@@ -85,6 +99,12 @@
   .detail-line a { color:var(--gold-deep); font-weight:600; text-decoration:none; }
   .muted { color:var(--bark-soft); }
 
+  .price-row { display:flex; justify-content:space-between; align-items:baseline; padding:14px 4px;
+    border-bottom:1.5px solid var(--line); }
+  .price-item { font-weight:600; font-size:15px; }
+  .price-note { font-size:12px; color:var(--bark-soft); margin-top:2px; }
+  .price-val { font-family:Fraunces,serif; font-weight:900; font-size:20px; color:var(--gold-deep); white-space:nowrap; margin-left:12px; }
+
   .empty { text-align:center; margin-top:50px; }
   .empty p:first-child { font-family:Fraunces,serif; font-size:20px; font-weight:700; }
   .empty p:last-child { font-size:14px; color:var(--bark-soft); margin-top:4px; }
@@ -94,23 +114,20 @@
     opacity:0; transition:opacity .2s; pointer-events:none; white-space:nowrap; }
   .toast.show { opacity:1; }
   .toast.err { background:var(--apple); color:#fff; }
-
   .spinner { text-align:center; padding:36px 0; color:var(--bark-soft); font-size:14px; }
   .btn-row { display:flex; gap:10px; margin-top:8px; }
   .btn-row .btn-primary { flex:1; }
+  .divider { border:none; border-top:1.5px dashed var(--line); margin:20px 0; }
 </style>
 </head>
 <body>
 <div class="wrap">
-  <header>
-    <div class="hdr-left">
-      <button class="btn btn-back" id="backBtn" style="display:none">←</button>
-      <div>
-        <div class="brand">One Tree <span>Field Log</span></div>
-        <div class="tag">accounts · visits · orders</div>
-      </div>
+  <header id="hdr">
+    <button class="btn btn-back" id="backBtn" style="display:none">←</button>
+    <div>
+      <div class="brand">One Tree <span>Hard Cider</span></div>
+      <div class="tag">Field Log</div>
     </div>
-    <button class="btn btn-add" id="addBtn">+</button>
   </header>
   <div id="app"></div>
 </div>
@@ -118,7 +135,7 @@
 
 <script>
 // ══════════════════════════════════════════════════════════════
-//  SETUP — paste your values here (see the setup guide)
+//  SETUP
 // ══════════════════════════════════════════════════════════════
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby57i2dEAGTwuuCqSv0IjwAXQILiHqSBP3-NXkhoorAREGQ_cmSQN6L0FfM6Jtu1RUQWA/exec";
 const SECRET     = "cider2026";   // matches the SECRET line in your Apps Script
@@ -130,16 +147,33 @@ const FLAVOR_GROUPS = [
   { label: "SPECIAL RELEASES", flavors: ["Heartbreaker", "St. Paddy's Pressed", "Cider & Stripes", "Caramel Cinnamon", "Pumpkin", "Snowglobe"] },
 ];
 const FORMATS = ["Cans", "Bottles", "1/6 Keg", "1/2 Keg", "20L Keg"];
+const KINDS = ["Ordered", "Dropped off", "Sample"];
 // ══════════════════════════════════════════════════════════════
 
+const TREE_SVG = `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="50" cy="38" r="26" fill="#4A6B4F"/>
+  <circle cx="30" cy="46" r="17" fill="#4A6B4F"/>
+  <circle cx="70" cy="46" r="17" fill="#4A6B4F"/>
+  <circle cx="50" cy="30" r="18" fill="#5B7D5F"/>
+  <rect x="45" y="58" width="10" height="26" rx="4" fill="#6B4A2B"/>
+  <path d="M50 62 Q38 56 30 60" stroke="#6B4A2B" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <circle cx="38" cy="34" r="4" fill="#C9862B"/>
+  <circle cx="62" cy="40" r="4" fill="#B8402F"/>
+  <circle cx="52" cy="48" r="4" fill="#C9862B"/>
+  <ellipse cx="50" cy="90" rx="26" ry="4" fill="#EADFCB"/>
+</svg>`;
+const STOP_ICON = `<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><path d="M24 4C15 4 8 11 8 20c0 11 16 24 16 24s16-13 16-24c0-9-7-16-16-16z" fill="#fff" opacity=".95"/><circle cx="24" cy="20" r="7" fill="#A76B18"/></svg>`;
+const PRICE_ICON = `<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><rect x="8" y="6" width="32" height="36" rx="4" fill="#E4EDE4"/><rect x="14" y="14" width="20" height="3" rx="1.5" fill="#4A6B4F"/><rect x="14" y="22" width="14" height="3" rx="1.5" fill="#4A6B4F"/><rect x="14" y="30" width="17" height="3" rx="1.5" fill="#4A6B4F"/><circle cx="34" cy="34" r="9" fill="#C9862B"/><text x="34" y="38.5" text-anchor="middle" font-size="13" font-weight="bold" fill="#fff" font-family="Arial">$</text></svg>`;
+const BOOK_ICON = `<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><rect x="9" y="8" width="30" height="32" rx="4" fill="#F6EAD3"/><rect x="9" y="8" width="8" height="32" rx="3" fill="#C9862B"/><rect x="22" y="16" width="12" height="3" rx="1.5" fill="#A76B18"/><rect x="22" y="23" width="12" height="3" rx="1.5" fill="#A76B18"/></svg>`;
+
 let accounts = [];
-let visitsByAccount = {};   // accountId -> array
-let view = { name: "list" };
+let visitsByAccount = {};
+let pricing = null;
+let view = { name: "home" };
 let search = "";
 
 const app = document.getElementById("app");
 const backBtn = document.getElementById("backBtn");
-const addBtn = document.getElementById("addBtn");
 const toastEl = document.getElementById("toast");
 
 function toast(msg, isErr) {
@@ -163,6 +197,9 @@ function todayISO() {
   const d = new Date();
   return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
 }
+function sortAccounts() {
+  accounts.sort((a,b) => String(a.name).localeCompare(String(b.name), undefined, {sensitivity:"base"}));
+}
 
 // ── API ──
 async function apiGet(params) {
@@ -175,12 +212,12 @@ async function apiPost(body) {
   const res = await fetch(SCRIPT_URL, { method:"POST", body: JSON.stringify(body) });
   return res.json();
 }
-
 async function loadAccounts() {
   try {
     const data = await apiGet({ action: "getAccounts" });
     if (data.error) throw new Error(data.error);
     accounts = data.accounts || [];
+    sortAccounts();
   } catch (e) {
     toast("Couldn't load accounts — check signal", true);
   }
@@ -192,70 +229,131 @@ async function loadVisits(accountId) {
   } catch (e) {}
 }
 
-// ── RENDER ──
+// ── NAV ──
+function go(v) { view = v; render(); }
+backBtn.onclick = () => {
+  const map = {
+    stopPick: { name:"home" }, accounts: { name:"home" }, pricing: { name:"home" },
+    account: { name:"accounts" }, newCombo: { name:"stopPick" },
+    accountForm: view.id ? { name:"account", id:view.id } : { name:"accounts" },
+    visitForm: view.from === "pick" ? { name:"stopPick" } : { name:"account", id:view.id },
+  };
+  go(map[view.name] || { name:"home" });
+};
+
 function render() {
-  backBtn.style.display = view.name === "list" ? "none" : "";
-  addBtn.style.display = view.name === "list" ? "" : "none";
-  if (view.name === "list") renderList();
-  else if (view.name === "account") renderAccount();
-  else if (view.name === "accountForm") renderAccountForm();
-  else if (view.name === "visitForm") renderVisitForm();
+  backBtn.style.display = view.name === "home" ? "none" : "";
+  const r = {
+    home: renderHome, stopPick: renderStopPick, accounts: renderAccounts,
+    account: renderAccount, accountForm: renderAccountForm,
+    visitForm: renderVisitForm, newCombo: renderNewCombo, pricing: renderPricing,
+  };
+  (r[view.name] || renderHome)();
   window.scrollTo(0, 0);
 }
 
-backBtn.onclick = () => {
-  if (view.name === "account") view = { name: "list" };
-  else if (view.name === "accountForm" && view.id) view = { name: "account", id: view.id };
-  else if (view.name === "visitForm") view = { name: "account", id: view.id };
-  else view = { name: "list" };
-  render();
-};
-addBtn.onclick = () => { view = { name: "accountForm" }; render(); };
+// ─────────────────────────────────────────────
+// HOME
+// ─────────────────────────────────────────────
+function renderHome() {
+  app.innerHTML = `
+    <div class="hero">
+      ${TREE_SVG}
+      <div class="hero-title">One Tree <span>Hard Cider</span></div>
+      <div class="hero-sub">Field Log · Spokane Valley</div>
+    </div>
+    <div class="tiles">
+      <button class="tile tile-big" onclick="goStopPick()">
+        <div class="t-icon">${STOP_ICON}</div>
+        <div><div class="t-name">Log Stop</div><div class="t-sub">Record a visit, order, drop, or sample</div></div>
+      </button>
+      <button class="tile" onclick="goPricing()">
+        <div class="t-icon">${PRICE_ICON}</div>
+        <div><div class="t-name">Pricing</div><div class="t-sub">Current keg, can &amp; bottle prices</div></div>
+      </button>
+      <button class="tile" onclick="goAccounts()">
+        <div class="t-icon">${BOOK_ICON}</div>
+        <div><div class="t-name">Accounts</div><div class="t-sub">Browse history &amp; contact info</div></div>
+      </button>
+    </div>`;
+}
+window.goStopPick = () => { search = ""; go({ name:"stopPick" }); };
+window.goPricing = () => go({ name:"pricing" });
+window.goAccounts = () => { search = ""; go({ name:"accounts" }); };
 
-function renderList() {
+// ─────────────────────────────────────────────
+// ACCOUNT LIST (two flavors: pick-for-stop, and browse)
+// ─────────────────────────────────────────────
+function accountListHTML(mode) {
   const q = search.trim().toLowerCase();
   const filtered = accounts.filter(a =>
     !q || (a.name||"").toLowerCase().includes(q) || (a.contact||"").toLowerCase().includes(q) || (a.address||"").toLowerCase().includes(q)
   );
-  let html = `<div class="page">
-    <input class="search" placeholder="Search accounts…" value="${esc(search)}" id="searchBox" />`;
-  if (!accounts.length) {
-    html += `<div class="empty"><p>No accounts yet</p><p>Tap + to add your first bar or restaurant.</p></div>`;
+  let html = "";
+  if (accounts.length === 0) {
+    html = `<div class="empty"><p>No accounts yet</p><p>${mode==="pick" ? "Tap “New account” to add your first stop." : "Add accounts from the Log Stop screen."}</p></div>`;
   } else if (!filtered.length) {
-    html += `<div class="empty"><p>No matches</p><p>Try a different search.</p></div>`;
+    html = `<div class="empty"><p>No matches</p><p>Try a different search.</p></div>`;
   } else {
     for (const a of filtered) {
       const v = visitsByAccount[a.id];
       const last = v && v.length ? v[0] : null;
-      html += `<button class="card" onclick="openAccount('${a.id}')">
+      const action = mode === "pick" ? `pickAccount('${a.id}')` : `openAccount('${a.id}')`;
+      html += `<button class="card" onclick="${action}">
         <div class="row-top">
           <div class="card-name">${esc(a.name)}</div>
           <span class="chip chip-leaf">${esc(a.type || "Account")}</span>
         </div>
         ${a.contact ? `<div class="card-sub">${esc(a.contact)}</div>` : ""}
-        <div class="card-meta">${last ? "Last visit " + fmtDate(last.date) + (last.followUp ? " · needs follow-up" : "") : "No visits loaded — tap to view"}</div>
+        ${last ? `<div class="card-meta">Last stop ${fmtDate(last.date)}${last.followUp ? " · needs follow-up" : ""}</div>` : ""}
       </button>`;
     }
   }
-  html += `</div>`;
-  app.innerHTML = html;
+  return html;
+}
+function wireSearch(rerender) {
   const box = document.getElementById("searchBox");
-  box.oninput = e => { search = e.target.value; renderList(); 
-    const nb = document.getElementById("searchBox"); nb.focus(); nb.setSelectionRange(nb.value.length, nb.value.length); };
+  box.oninput = e => {
+    search = e.target.value; rerender();
+    const nb = document.getElementById("searchBox");
+    nb.focus(); nb.setSelectionRange(nb.value.length, nb.value.length);
+  };
 }
 
+function renderStopPick() {
+  app.innerHTML = `<div class="page">
+    <h2 style="margin-bottom:12px">Log a stop</h2>
+    <button class="btn btn-primary" style="margin-bottom:14px" onclick="goNewCombo()">+ New account &amp; first stop</button>
+    <input class="search" placeholder="Search accounts…" value="${esc(search)}" id="searchBox" />
+    ${accountListHTML("pick")}
+  </div>`;
+  wireSearch(renderStopPick);
+}
+window.goNewCombo = () => go({ name:"newCombo" });
+window.pickAccount = (id) => go({ name:"visitForm", id, from:"pick" });
+
+function renderAccounts() {
+  app.innerHTML = `<div class="page">
+    <h2 style="margin-bottom:12px">Accounts</h2>
+    <input class="search" placeholder="Search accounts…" value="${esc(search)}" id="searchBox" />
+    ${accountListHTML("browse")}
+  </div>`;
+  wireSearch(renderAccounts);
+}
 window.openAccount = async function(id) {
-  view = { name: "account", id };
-  render();
+  go({ name: "account", id });
   if (!visitsByAccount[id]) {
     await loadVisits(id);
     if (view.name === "account" && view.id === id) render();
   }
 };
 
+// ─────────────────────────────────────────────
+// ACCOUNT DETAIL
+// ─────────────────────────────────────────────
 function renderAccount() {
   const a = accounts.find(x => x.id === view.id);
-  if (!a) { view = { name: "list" }; return render(); }
+  if (!a) return go({ name:"accounts" });
   const v = visitsByAccount[a.id];
   let html = `<div class="page">
     <div class="row-top">
@@ -270,45 +368,48 @@ function renderAccount() {
       ${a.notes ? `<div class="detail-line muted" style="margin-top:8px;padding-top:8px;border-top:1px solid var(--line)">${esc(a.notes)}</div>` : ""}
       ${!a.address && !a.contact && !a.phone && !a.notes ? `<div class="detail-line muted">No details yet — tap Edit to add contact info.</div>` : ""}
     </div>
-    <button class="btn btn-primary" style="box-shadow:0 4px 14px rgba(201,134,43,.35);margin:6px 0 4px" onclick="logVisit()">+ Log a visit</button>
-    <div class="section-lbl">Visit history</div>`;
-  if (!v) html += `<div class="spinner">Loading visits…</div>`;
-  else if (!v.length) html += `<div class="card muted" style="font-size:14px">No visits logged yet.</div>`;
-  else for (const visit of v) {
-    html += `<div class="card">
-      <div class="row-top">
-        <div style="font-family:Fraunces,serif;font-weight:700;font-size:16px">${fmtDate(visit.date)}</div>
-        ${visit.followUp ? `<span class="chip chip-apple">Follow up</span>` : ""}
-      </div>
-      ${visit.spokeWith ? `<div class="card-sub">Spoke with ${esc(visit.spokeWith)}</div>` : ""}
-      <div class="visit-chips">
-        ${visit.ordered ? String(visit.ordered).split(";").map(part =>
-          `<span class="chip chip-gold">Ordered: ${esc(part.trim())}</span>`).join("") : ""}
-        ${visit.dropped ? String(visit.dropped).split(";").map(part =>
-          `<span class="chip chip-leaf">Dropped: ${esc(part.trim())}</span>`).join("") : ""}
-        ${!visit.ordered && !visit.dropped ? `<span class="chip chip-mute">No order</span>` : ""}
-      </div>
-      ${visit.notes ? `<div class="visit-notes">${esc(visit.notes)}</div>` : ""}
-    </div>`;
-  }
+    <button class="btn btn-primary" style="margin:6px 0 4px" onclick="logVisit()">+ Log a stop here</button>
+    <div class="section-lbl">Stop history</div>`;
+  if (!v) html += `<div class="spinner">Loading stops…</div>`;
+  else if (!v.length) html += `<div class="card muted" style="font-size:14px">No stops logged yet.</div>`;
+  else for (const visit of v) html += visitCardHTML(visit);
   html += `</div>`;
   app.innerHTML = html;
 }
+window.editAccount = () => go({ name:"accountForm", id:view.id });
+window.logVisit = () => go({ name:"visitForm", id:view.id, from:"account" });
 
-window.editAccount = () => { view = { name: "accountForm", id: view.id }; render(); };
-window.logVisit = () => { view = { name: "visitForm", id: view.id }; render(); };
+function visitCardHTML(visit) {
+  const chips = (val, label, cls) => val ? String(val).split(";").map(p =>
+    `<span class="chip ${cls}">${label}: ${esc(p.trim())}</span>`).join("") : "";
+  const any = visit.ordered || visit.dropped || visit.samples;
+  return `<div class="card">
+    <div class="row-top">
+      <div style="font-family:Fraunces,serif;font-weight:700;font-size:16px">${fmtDate(visit.date)}</div>
+      ${visit.followUp ? `<span class="chip chip-apple">Follow up</span>` : ""}
+    </div>
+    ${visit.spokeWith ? `<div class="card-sub">Spoke with ${esc(visit.spokeWith)}</div>` : ""}
+    ${visit.odomRep ? `<div class="card-sub">Odom rep: ${esc(visit.odomRep)}</div>` : ""}
+    <div class="visit-chips">
+      ${chips(visit.ordered, "Ordered", "chip-gold")}
+      ${chips(visit.dropped, "Dropped", "chip-leaf")}
+      ${chips(visit.samples, "Sample", "chip-apple")}
+      ${!any ? `<span class="chip chip-mute">No product</span>` : ""}
+    </div>
+    ${visit.notes ? `<div class="visit-notes">${esc(visit.notes)}</div>` : ""}
+  </div>`;
+}
 
-// ── ACCOUNT FORM ──
-function renderAccountForm() {
-  const existing = view.id ? accounts.find(x => x.id === view.id) : null;
-  const f = existing || { name:"", type:"Bar", address:"", contact:"", phone:"", notes:"" };
+// ─────────────────────────────────────────────
+// SHARED FORM PIECES
+// ─────────────────────────────────────────────
+function accountFieldsHTML(f) {
   const types = ["Bar","Restaurant","Taproom","Store","Other"];
-  app.innerHTML = `<div class="page">
-    <h2 style="margin-bottom:18px">${existing ? "Edit account" : "New account"}</h2>
+  return `
     <label class="field"><span class="lbl">Account name</span>
       <input id="f_name" value="${esc(f.name)}" placeholder="e.g. The Flying Goat" /></label>
     <label class="field"><span class="lbl">Type</span>
-      <div class="type-row">${types.map(t =>
+      <div class="type-row" id="typeRow">${types.map(t =>
         `<button class="type-btn${f.type===t?" on":""}" data-type="${t}">${t}</button>`).join("")}
       </div></label>
     <label class="field"><span class="lbl">Address</span>
@@ -318,75 +419,44 @@ function renderAccountForm() {
     <label class="field"><span class="lbl">Contact phone</span>
       <input id="f_phone" value="${esc(f.phone)}" inputmode="tel" placeholder="(509) …" /></label>
     <label class="field"><span class="lbl">Account notes</span>
-      <textarea id="f_notes" placeholder="Tap lineup, best days to visit, quirks…">${esc(f.notes)}</textarea></label>
-    <div class="btn-row">
-      <button class="btn btn-primary" id="saveAcct">${existing ? "Save changes" : "Add account"}</button>
-      <button class="btn btn-ghost" id="cancelAcct">Cancel</button>
-    </div>
-  </div>`;
-  let type = f.type;
-  document.querySelectorAll(".type-btn").forEach(b => b.onclick = () => {
+      <textarea id="f_notes" placeholder="Tap lineup, best days to visit, quirks…">${esc(f.notes)}</textarea></label>`;
+}
+function wireTypeRow(initial) {
+  let type = initial;
+  document.querySelectorAll("#typeRow .type-btn").forEach(b => b.onclick = () => {
     type = b.dataset.type;
-    document.querySelectorAll(".type-btn").forEach(x => x.classList.toggle("on", x === b));
+    document.querySelectorAll("#typeRow .type-btn").forEach(x => x.classList.toggle("on", x === b));
   });
-  document.getElementById("cancelAcct").onclick = () => backBtn.onclick();
-  document.getElementById("saveAcct").onclick = async () => {
-    const btn = document.getElementById("saveAcct");
-    const acct = {
-      name: document.getElementById("f_name").value.trim(),
-      type,
-      address: document.getElementById("f_address").value.trim(),
-      contact: document.getElementById("f_contact").value.trim(),
-      phone: document.getElementById("f_phone").value.trim(),
-      notes: document.getElementById("f_notes").value.trim(),
-    };
-    if (!acct.name) return toast("Give the account a name", true);
-    btn.disabled = true; btn.textContent = "Saving…";
-    try {
-      if (existing) {
-        acct.id = existing.id;
-        const r = await apiPost({ action:"updateAccount", account: acct });
-        if (r.error) throw new Error(r.error);
-        Object.assign(existing, acct);
-        toast("Account updated");
-        view = { name:"account", id: existing.id };
-      } else {
-        const r = await apiPost({ action:"addAccount", account: acct });
-        if (r.error || !r.id) throw new Error(r.error || "no id");
-        acct.id = r.id;
-        accounts.push(acct);
-        visitsByAccount[acct.id] = [];
-        toast("Account added");
-        view = { name:"list" };
-      }
-      render();
-    } catch (e) {
-      btn.disabled = false; btn.textContent = existing ? "Save changes" : "Add account";
-      toast("Save failed — check signal and try again", true);
-    }
+  return () => type;
+}
+function readAccountFields(getType) {
+  return {
+    name: document.getElementById("f_name").value.trim(),
+    type: getType(),
+    address: document.getElementById("f_address").value.trim(),
+    contact: document.getElementById("f_contact").value.trim(),
+    phone: document.getElementById("f_phone").value.trim(),
+    notes: document.getElementById("f_notes").value.trim(),
   };
 }
 
-// ── VISIT FORM ──
-function renderVisitForm() {
-  const a = accounts.find(x => x.id === view.id);
-  if (!a) { view = { name:"list" }; return render(); }
-  app.innerHTML = `<div class="page">
-    <h2>Log a visit</h2>
-    <div style="color:var(--gold-deep);font-weight:600;font-size:14px;margin-bottom:16px">${esc(a.name)}</div>
+function visitFieldsHTML(spokeDefault) {
+  return `
     <label class="field"><span class="lbl">Date</span>
       <input id="v_date" type="date" value="${todayISO()}" /></label>
     <label class="field"><span class="lbl">Spoke with</span>
-      <input id="v_spoke" value="${esc(a.contact || "")}" placeholder="Name / role" /></label>
+      <input id="v_spoke" value="${esc(spokeDefault || "")}" placeholder="Name / role" /></label>
+    <label class="field"><span class="lbl">Odom rep</span>
+      <input id="v_odom" placeholder="Odom rep on this account (if any)" /></label>
     <label class="field"><span class="lbl">What they said / notes</span>
       <textarea id="v_notes" placeholder="Feedback, what's on tap, promises made…"></textarea></label>
     <div class="order-box">
-      <div class="lbl">Order placed</div>
+      <div class="lbl">Product — ordered, dropped, or sampled</div>
       <div id="orderItems" style="margin-bottom:10px"></div>
-      <div style="font-size:13px;font-weight:600;margin-bottom:6px">Flavor</div>
+      <div style="font-size:13px;font-weight:600;margin-bottom:2px">Flavor</div>
       <div id="flavorRow" style="margin-bottom:12px">
         ${FLAVOR_GROUPS.map(g => `
-          <div style="font-size:10.5px;font-weight:700;letter-spacing:.1em;color:var(--gold-deep);margin:8px 0 5px">${esc(g.label)}</div>
+          <div class="fl-group">${esc(g.label)}</div>
           <div class="type-row">${g.flavors.map(fl => `<button class="type-btn" data-flavor="${esc(fl)}">${esc(fl)}</button>`).join("")}</div>
         `).join("")}
       </div>
@@ -402,24 +472,17 @@ function renderVisitForm() {
       </div>
       <div style="font-size:13px;font-weight:600;margin:10px 0 6px">This item was…</div>
       <div class="type-row" id="kindRow" style="margin-bottom:12px">
-        <button class="type-btn on" data-kind="Ordered">Ordered</button>
-        <button class="type-btn" data-kind="Dropped off">Dropped off</button>
+        ${KINDS.map((k,i) => `<button class="type-btn${i===0?" on":""}" data-kind="${k}">${k}</button>`).join("")}
       </div>
-      <button class="btn" id="addItem" style="width:100%;padding:12px;border-radius:12px;background:#fff;color:var(--gold-deep);border:1.5px dashed var(--gold);font-size:14px;margin-top:6px">+ Add to order</button>
+      <button class="btn" id="addItem" style="width:100%;padding:12px;border-radius:12px;background:#fff;color:var(--gold-deep);border:1.5px dashed var(--gold);font-size:14px;margin-top:6px">+ Add item</button>
     </div>
-    <button class="followup" id="v_follow">○ Mark for follow-up</button>
-    <div class="btn-row">
-      <button class="btn btn-primary" id="saveVisit">Save visit</button>
-      <button class="btn btn-ghost" id="cancelVisit">Cancel</button>
-    </div>
-  </div>`;
-  let orderItems = [];   // {flavor, format, qty, kind}
-  let selFlavor = null, selFormat = null, qty = 1, selKind = "Ordered";
-
+    <button class="followup" id="v_follow">○ Mark for follow-up</button>`;
+}
+function wireVisitFields() {
+  let orderItems = [], selFlavor = null, selFormat = null, qty = 1, selKind = "Ordered", followUp = false;
   const qtyV = document.getElementById("qtyV");
   document.getElementById("qtyM").onclick = () => { qty = Math.max(1, qty-1); qtyV.textContent = qty; };
   document.getElementById("qtyP").onclick = () => { qty++; qtyV.textContent = qty; };
-
   document.querySelectorAll("#flavorRow .type-btn").forEach(b => b.onclick = () => {
     selFlavor = b.dataset.flavor;
     document.querySelectorAll("#flavorRow .type-btn").forEach(x => x.classList.toggle("on", x === b));
@@ -432,79 +495,194 @@ function renderVisitForm() {
     selKind = b.dataset.kind;
     document.querySelectorAll("#kindRow .type-btn").forEach(x => x.classList.toggle("on", x === b));
   });
-
   function drawItems() {
     const el = document.getElementById("orderItems");
     if (!orderItems.length) { el.innerHTML = ""; return; }
+    const cls = { "Ordered":"chip-gold", "Dropped off":"chip-leaf", "Sample":"chip-apple" };
     el.innerHTML = orderItems.map((it, i) =>
       `<div style="display:flex;justify-content:space-between;align-items:center;background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:9px 12px;margin-bottom:6px">
         <span style="font-size:14px;font-weight:600">${it.qty} × ${esc(it.format)} — ${esc(it.flavor)}
-          <span class="chip ${it.kind === "Ordered" ? "chip-gold" : "chip-leaf"}" style="margin-left:6px">${esc(it.kind)}</span></span>
+          <span class="chip ${cls[it.kind]}" style="margin-left:6px">${esc(it.kind)}</span></span>
         <button data-rm="${i}" style="border:none;background:var(--apple-pale);color:var(--apple);border-radius:50%;width:26px;height:26px;font-weight:700">✕</button>
       </div>`).join("");
     el.querySelectorAll("[data-rm]").forEach(b => b.onclick = () => {
       orderItems.splice(Number(b.dataset.rm), 1); drawItems();
     });
   }
-
   document.getElementById("addItem").onclick = () => {
     if (!selFlavor) return toast("Pick a flavor first", true);
     if (!selFormat) return toast("Pick a format", true);
     orderItems.push({ flavor: selFlavor, format: selFormat, qty, kind: selKind });
-    // reset flavor/format/qty for the next item; keep the kind selection
     selFlavor = null; selFormat = null; qty = 1; qtyV.textContent = 1;
     document.querySelectorAll("#flavorRow .type-btn, #formatRow .type-btn").forEach(x => x.classList.remove("on"));
     drawItems();
   };
-
   const fBtn = document.getElementById("v_follow");
-  let followUp = false;
   fBtn.onclick = () => {
     followUp = !followUp;
     fBtn.classList.toggle("on", followUp);
     fBtn.textContent = followUp ? "● Needs follow-up" : "○ Mark for follow-up";
   };
+  return function readVisit() {
+    const fmt = (arr) => arr.map(it => `${it.qty} × ${it.format} — ${it.flavor}`).join("; ");
+    return {
+      date: document.getElementById("v_date").value,
+      spokeWith: document.getElementById("v_spoke").value.trim(),
+      odomRep: document.getElementById("v_odom").value.trim(),
+      notes: document.getElementById("v_notes").value.trim(),
+      ordered: fmt(orderItems.filter(it => it.kind === "Ordered")),
+      dropped: fmt(orderItems.filter(it => it.kind === "Dropped off")),
+      samples: fmt(orderItems.filter(it => it.kind === "Sample")),
+      followUp,
+    };
+  };
+}
+
+// ─────────────────────────────────────────────
+// VISIT FORM (existing account)
+// ─────────────────────────────────────────────
+function renderVisitForm() {
+  const a = accounts.find(x => x.id === view.id);
+  if (!a) return go({ name:"stopPick" });
+  app.innerHTML = `<div class="page">
+    <h2>Log a stop</h2>
+    <div style="color:var(--gold-deep);font-weight:600;font-size:14px;margin-bottom:16px">${esc(a.name)}</div>
+    ${visitFieldsHTML(a.contact)}
+    <div class="btn-row">
+      <button class="btn btn-primary" id="saveVisit">Save stop</button>
+      <button class="btn btn-ghost" id="cancelVisit">Cancel</button>
+    </div>
+  </div>`;
+  const readVisit = wireVisitFields();
   document.getElementById("cancelVisit").onclick = () => backBtn.onclick();
   document.getElementById("saveVisit").onclick = async () => {
     const btn = document.getElementById("saveVisit");
     btn.disabled = true; btn.textContent = "Saving…";
-    const fmt = (arr) => arr.map(it => `${it.qty} × ${it.format} — ${it.flavor}`).join("; ");
-    const visit = {
-      date: document.getElementById("v_date").value,
-      accountId: a.id,
-      accountName: a.name,
-      spokeWith: document.getElementById("v_spoke").value.trim(),
-      notes: document.getElementById("v_notes").value.trim(),
-      ordered: fmt(orderItems.filter(it => it.kind === "Ordered")),
-      dropped: fmt(orderItems.filter(it => it.kind === "Dropped off")),
-      followUp,
-    };
+    const visit = Object.assign(readVisit(), { accountId: a.id, accountName: a.name });
     try {
       const r = await apiPost({ action:"addVisit", visit });
       if (r.error) throw new Error(r.error);
-      visitsByAccount[a.id] = [Object.assign({}, visit)].concat(visitsByAccount[a.id] || []);
-      toast("Visit logged");
-      view = { name:"account", id: a.id };
-      render();
+      visitsByAccount[a.id] = [visit].concat(visitsByAccount[a.id] || []);
+      toast("Stop logged");
+      go({ name:"account", id: a.id });
     } catch (e) {
-      btn.disabled = false; btn.textContent = "Save visit";
+      btn.disabled = false; btn.textContent = "Save stop";
       toast("Save failed — your notes are still here, try again", true);
     }
   };
 }
 
+// ─────────────────────────────────────────────
+// NEW ACCOUNT + FIRST STOP (all in one)
+// ─────────────────────────────────────────────
+function renderNewCombo() {
+  app.innerHTML = `<div class="page">
+    <h2 style="margin-bottom:18px">New account &amp; first stop</h2>
+    ${accountFieldsHTML({ name:"", type:"Bar", address:"", contact:"", phone:"", notes:"" })}
+    <hr class="divider" />
+    <div class="section-lbl" style="margin-top:0">This stop</div>
+    ${visitFieldsHTML("")}
+    <div class="btn-row">
+      <button class="btn btn-primary" id="saveCombo">Save account &amp; stop</button>
+      <button class="btn btn-ghost" id="cancelCombo">Cancel</button>
+    </div>
+  </div>`;
+  const getType = wireTypeRow("Bar");
+  const readVisit = wireVisitFields();
+  document.getElementById("cancelCombo").onclick = () => backBtn.onclick();
+  document.getElementById("saveCombo").onclick = async () => {
+    const btn = document.getElementById("saveCombo");
+    const acct = readAccountFields(getType);
+    if (!acct.name) return toast("Give the account a name", true);
+    btn.disabled = true; btn.textContent = "Saving…";
+    try {
+      const r1 = await apiPost({ action:"addAccount", account: acct });
+      if (r1.error || !r1.id) throw new Error(r1.error || "no id");
+      acct.id = r1.id;
+      accounts.push(acct); sortAccounts();
+      const visit = Object.assign(readVisit(), { accountId: acct.id, accountName: acct.name });
+      const r2 = await apiPost({ action:"addVisit", visit });
+      if (r2.error) throw new Error(r2.error);
+      visitsByAccount[acct.id] = [visit];
+      toast("Account & stop saved");
+      go({ name:"account", id: acct.id });
+    } catch (e) {
+      btn.disabled = false; btn.textContent = "Save account & stop";
+      toast("Save failed — check signal and try again", true);
+    }
+  };
+}
+
+// ─────────────────────────────────────────────
+// EDIT ACCOUNT
+// ─────────────────────────────────────────────
+function renderAccountForm() {
+  const existing = accounts.find(x => x.id === view.id);
+  if (!existing) return go({ name:"accounts" });
+  app.innerHTML = `<div class="page">
+    <h2 style="margin-bottom:18px">Edit account</h2>
+    ${accountFieldsHTML(existing)}
+    <div class="btn-row">
+      <button class="btn btn-primary" id="saveAcct">Save changes</button>
+      <button class="btn btn-ghost" id="cancelAcct">Cancel</button>
+    </div>
+  </div>`;
+  const getType = wireTypeRow(existing.type || "Bar");
+  document.getElementById("cancelAcct").onclick = () => backBtn.onclick();
+  document.getElementById("saveAcct").onclick = async () => {
+    const btn = document.getElementById("saveAcct");
+    const acct = readAccountFields(getType);
+    if (!acct.name) return toast("Give the account a name", true);
+    btn.disabled = true; btn.textContent = "Saving…";
+    try {
+      acct.id = existing.id;
+      const r = await apiPost({ action:"updateAccount", account: acct });
+      if (r.error) throw new Error(r.error);
+      Object.assign(existing, acct); sortAccounts();
+      toast("Account updated");
+      go({ name:"account", id: existing.id });
+    } catch (e) {
+      btn.disabled = false; btn.textContent = "Save changes";
+      toast("Save failed — check signal and try again", true);
+    }
+  };
+}
+
+// ─────────────────────────────────────────────
+// PRICING
+// ─────────────────────────────────────────────
+async function renderPricing() {
+  if (pricing === null) {
+    app.innerHTML = `<div class="page"><h2>Pricing</h2><div class="spinner">Loading prices…</div></div>`;
+    try {
+      const data = await apiGet({ action: "getPricing" });
+      pricing = data.pricing || [];
+    } catch (e) {
+      pricing = null;
+      app.innerHTML = `<div class="page"><h2>Pricing</h2><div class="card muted" style="font-size:14px">Couldn't load prices — check signal and reopen.</div></div>`;
+      return;
+    }
+    if (view.name !== "pricing") return;
+  }
+  let rows = "";
+  for (const p of pricing) {
+    rows += `<div class="price-row">
+      <div><div class="price-item">${esc(p.item)}</div>${p.notes ? `<div class="price-note">${esc(p.notes)}</div>` : ""}</div>
+      <div class="price-val">${p.price ? "$" + esc(p.price) : "—"}</div>
+    </div>`;
+  }
+  app.innerHTML = `<div class="page">
+    <h2 style="margin-bottom:4px">Pricing</h2>
+    <p class="muted" style="font-size:13px;margin-bottom:10px">Prices come straight from the Pricing tab in the spreadsheet.</p>
+    <div class="card" style="padding:4px 14px">${rows || `<div class="spinner">No prices yet — add rows to the Pricing tab in the Sheet.</div>`}</div>
+  </div>`;
+}
+
 // ── boot ──
 (async function init() {
-  if (SCRIPT_URL.startsWith("PASTE")) {
-    app.innerHTML = `<div class="page"><div class="card" style="font-size:14px">
-      <b>Almost there.</b><br><br>Open this file and paste your Apps Script Web App URL into the
-      <code>SCRIPT_URL</code> line near the top, and set your <code>SECRET</code>.
-      The setup guide walks through it step by step.</div></div>`;
-    return;
-  }
-  app.innerHTML = `<div class="spinner">Loading accounts…</div>`;
+  renderHome();
   await loadAccounts();
-  render();
+  if (view.name === "home") renderHome();
 })();
 </script>
 </body>
