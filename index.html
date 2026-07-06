@@ -163,6 +163,12 @@ const FLAVOR_GROUPS = [
 ];
 const FORMATS = ["Cans", "Bottles", "1/6 Keg", "1/2 Keg", "20L Keg"];
 const KINDS = ["Ordered", "Dropped off", "Sample"];
+
+// Sales sheets: upload images (.png/.jpg) to the "sheets" folder in the GitHub repo
+// and they appear in the app automatically — no code changes needed.
+const GH_USER = "onetreeecider";
+const GH_REPO = "field-log";
+const GH_FOLDER = "sheets";
 // ══════════════════════════════════════════════════════════════
 
 const TREE_SVG = `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -180,6 +186,8 @@ const TREE_SVG = `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
 const STOP_ICON = `<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><path d="M24 4C15 4 8 11 8 20c0 11 16 24 16 24s16-13 16-24c0-9-7-16-16-16z" fill="#fff" opacity=".95"/><circle cx="24" cy="20" r="7" fill="#A76B18"/></svg>`;
 const PRICE_ICON = `<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><rect x="8" y="6" width="32" height="36" rx="4" fill="#E4EDE4"/><rect x="14" y="14" width="20" height="3" rx="1.5" fill="#4A6B4F"/><rect x="14" y="22" width="14" height="3" rx="1.5" fill="#4A6B4F"/><rect x="14" y="30" width="17" height="3" rx="1.5" fill="#4A6B4F"/><circle cx="34" cy="34" r="9" fill="#C9862B"/><text x="34" y="38.5" text-anchor="middle" font-size="13" font-weight="bold" fill="#fff" font-family="Arial">$</text></svg>`;
 const BOOK_ICON = `<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><rect x="9" y="8" width="30" height="32" rx="4" fill="#F6EAD3"/><rect x="9" y="8" width="8" height="32" rx="3" fill="#C9862B"/><rect x="22" y="16" width="12" height="3" rx="1.5" fill="#A76B18"/><rect x="22" y="23" width="12" height="3" rx="1.5" fill="#A76B18"/></svg>`;
+const FLAG_ICON = `<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><rect x="12" y="6" width="4" height="36" rx="2" fill="#6B4A2B"/><path d="M16 8h20l-5 7 5 7H16z" fill="#B8402F"/></svg>`;
+const SHEETS_ICON = `<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><rect x="8" y="10" width="26" height="30" rx="4" fill="#E4EDE4"/><rect x="14" y="4" width="26" height="30" rx="4" fill="#F6EAD3" stroke="#C9862B" stroke-width="2"/><circle cx="23" cy="14" r="4" fill="#C9862B"/><path d="M16 28l7-8 6 6 4-4 7 8v0a4 4 0 01-4 4H20a4 4 0 01-4-4z" fill="#4A6B4F"/></svg>`;
 
 let accounts = [];
 let visitsByAccount = {};
@@ -249,6 +257,7 @@ function go(v) { view = v; render(); }
 backBtn.onclick = () => {
   const map = {
     stopPick: { name:"home" }, accounts: { name:"home" }, pricing: { name:"home" },
+    followups: { name:"home" }, resources: { name:"home" },
     account: { name:"accounts" }, newCombo: { name:"stopPick" },
     accountForm: view.id ? { name:"account", id:view.id } : { name:"accounts" },
     visitForm: view.from === "pick" ? { name:"stopPick" } : { name:"account", id:view.id },
@@ -262,6 +271,7 @@ function render() {
     home: renderHome, stopPick: renderStopPick, accounts: renderAccounts,
     account: renderAccount, accountForm: renderAccountForm,
     visitForm: renderVisitForm, newCombo: renderNewCombo, pricing: renderPricing,
+    followups: renderFollowups, resources: renderResources,
   };
   (r[view.name] || renderHome)();
   window.scrollTo(0, 0);
@@ -286,6 +296,14 @@ function renderHome() {
         <div class="t-icon">${PRICE_ICON}</div>
         <div><div class="t-name">Pricing</div><div class="t-sub">Current keg, can &amp; bottle prices</div></div>
       </button>
+      <button class="tile" onclick="goSheets()">
+        <div class="t-icon">${SHEETS_ICON}</div>
+        <div><div class="t-name">Sales Sheets</div><div class="t-sub">Sell sheets to show, text, or email</div></div>
+      </button>
+      <button class="tile" onclick="goFollowups()">
+        <div class="t-icon">${FLAG_ICON}</div>
+        <div><div class="t-name">Follow-ups</div><div class="t-sub">Accounts waiting on you</div></div>
+      </button>
       <button class="tile" onclick="goAccounts()">
         <div class="t-icon">${BOOK_ICON}</div>
         <div><div class="t-name">Accounts</div><div class="t-sub">Browse history &amp; contact info</div></div>
@@ -295,6 +313,8 @@ function renderHome() {
 window.goStopPick = () => { search = ""; go({ name:"stopPick" }); };
 window.goPricing = () => go({ name:"pricing" });
 window.goAccounts = () => { search = ""; go({ name:"accounts" }); };
+window.goFollowups = () => go({ name:"followups" });
+window.goSheets = () => go({ name:"resources" });
 
 // ─────────────────────────────────────────────
 // ACCOUNT LIST (two flavors: pick-for-stop, and browse)
@@ -733,6 +753,124 @@ async function renderPricing() {
   html += `</div>`;
   app.innerHTML = html;
 }
+
+// ─────────────────────────────────────────────
+// FOLLOW-UPS
+// ─────────────────────────────────────────────
+async function renderFollowups() {
+  app.innerHTML = `<div class="page"><h2>Follow-ups</h2><div class="spinner">Checking who's waiting on you…</div></div>`;
+  let visits = [];
+  try {
+    const data = await apiGet({ action: "getVisits" });
+    if (data.error) throw new Error(data.error);
+    visits = (data.visits || []).filter(v => v.followUp);
+  } catch (e) {
+    app.innerHTML = `<div class="page"><h2>Follow-ups</h2><div class="card muted" style="font-size:14px">Couldn't load — check signal and reopen.</div></div>`;
+    return;
+  }
+  if (view.name !== "followups") return;
+  drawFollowups(visits);
+}
+function drawFollowups(visits) {
+  let html = `<div class="page"><h2 style="margin-bottom:12px">Follow-ups</h2>`;
+  if (!visits.length) {
+    html += `<div class="empty"><p>All caught up 🍎</p><p>No accounts are flagged for follow-up.</p></div>`;
+  } else {
+    for (const v of visits) {
+      const days = Math.max(0, Math.floor((new Date() - new Date(String(v.date).slice(0,10) + "T12:00:00")) / 86400000));
+      const dayTxt = days === 0 ? "Flagged today" : days === 1 ? "1 day ago" : days + " days ago";
+      html += `<div class="card" id="fu-${v.row}">
+        <div class="row-top">
+          <div class="card-name">${esc(v.accountName)}</div>
+          <span class="chip chip-apple">${dayTxt}</span>
+        </div>
+        <div class="card-sub">Stop on ${fmtDate(v.date)}${v.spokeWith ? " · spoke with " + esc(v.spokeWith) : ""}</div>
+        ${v.notes ? `<div class="visit-notes">${esc(v.notes)}</div>` : `<div class="visit-notes muted">No note on this one.</div>`}
+        <div class="btn-row" style="margin-top:12px">
+          <button class="btn btn-primary" style="padding:11px;font-size:14px" onclick="openAccount('${esc(v.accountId)}')">Open account</button>
+          <button class="btn btn-ghost" style="padding:11px 14px;font-size:14px" onclick="clearFollowup(${v.row}, '${esc(v.accountId)}')">✓ Done</button>
+        </div>
+      </div>`;
+    }
+  }
+  html += `</div>`;
+  app.innerHTML = html;
+}
+window.clearFollowup = async function(row, accountId) {
+  const card = document.getElementById("fu-" + row);
+  if (card) card.style.opacity = "0.45";
+  try {
+    const r = await apiPost({ action: "clearFollowUp", row, accountId });
+    if (r.error) throw new Error(r.error);
+    if (card) card.remove();
+    delete visitsByAccount[accountId];   // stale — reload next time it's viewed
+    toast("Follow-up cleared");
+    if (!document.querySelector("[id^='fu-']")) drawFollowups([]);
+  } catch (e) {
+    if (card) card.style.opacity = "1";
+    toast("Couldn't clear — try again", true);
+  }
+};
+
+// ─────────────────────────────────────────────
+// SALES SHEETS
+// ─────────────────────────────────────────────
+let resources = null;
+async function renderResources() {
+  if (resources === null) {
+    app.innerHTML = `<div class="page"><h2>Sales Sheets</h2><div class="spinner">Loading sheets…</div></div>`;
+    try {
+      const res = await fetch(`https://api.github.com/repos/${GH_USER}/${GH_REPO}/contents/${GH_FOLDER}`);
+      if (!res.ok) throw new Error("no folder");
+      const files = await res.json();
+      resources = files.filter(f => /\.(png|jpe?g|gif|webp)$/i.test(f.name))
+        .map(f => ({
+          name: f.name.replace(/\.[^.]+$/, "").replace(/[-_]+/g, " "),
+          url: `https://${GH_USER}.github.io/${GH_REPO}/${GH_FOLDER}/${encodeURIComponent(f.name)}`,
+        }));
+    } catch (e) {
+      resources = [];
+    }
+    if (view.name !== "resources") return;
+  }
+  let html = `<div class="page"><h2 style="margin-bottom:12px">Sales Sheets</h2>`;
+  if (!resources.length) {
+    html += `<div class="card muted" style="font-size:14px">No sheets yet. Upload images to the <b>${esc(GH_FOLDER)}</b> folder in the GitHub repo and they'll show up here automatically.</div>`;
+  } else {
+    for (let i = 0; i < resources.length; i++) {
+      const r = resources[i];
+      html += `<button class="card" style="padding:0;overflow:hidden" onclick="openSheet(${i})">
+        <img src="${r.url}" alt="${esc(r.name)}" style="width:100%;display:block;max-height:220px;object-fit:cover" loading="lazy" />
+        <div style="padding:12px 15px;font-family:Fraunces,serif;font-weight:700;font-size:16px;text-transform:capitalize">${esc(r.name)}</div>
+      </button>`;
+    }
+  }
+  html += `</div>`;
+  app.innerHTML = html;
+}
+window.openSheet = function(i) {
+  const r = resources[i];
+  const subject = encodeURIComponent("One Tree Hard Cider — " + r.name);
+  const bodyTxt = encodeURIComponent("Here's our " + r.name + " sheet: " + r.url);
+  const overlay = document.createElement("div");
+  overlay.style.cssText = "position:fixed;inset:0;z-index:60;background:rgba(30,24,16,.93);display:flex;flex-direction:column;padding:14px;";
+  overlay.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <div style="color:#F6EAD3;font-family:Fraunces,serif;font-weight:700;font-size:17px;text-transform:capitalize">${esc(r.name)}</div>
+      <button id="sheetClose" style="border:none;background:rgba(255,255,255,.15);color:#F6EAD3;border-radius:50%;width:34px;height:34px;font-size:16px;font-weight:700">✕</button>
+    </div>
+    <div style="flex:1;overflow:auto;display:flex;align-items:flex-start;justify-content:center">
+      <img src="${r.url}" style="max-width:100%;border-radius:12px" />
+    </div>
+    <div style="text-align:center;color:#BFCDbf;font-size:12px;margin:10px 0 8px">Press and hold the image to save it to your phone</div>
+    <div style="display:flex;gap:10px">
+      <a href="mailto:?subject=${subject}&body=${bodyTxt}" style="flex:1;text-align:center;padding:13px;border-radius:12px;background:var(--gold);color:#fff;font-weight:700;text-decoration:none;font-size:14px">Email</a>
+      <a href="sms:?&body=${bodyTxt}" style="flex:1;text-align:center;padding:13px;border-radius:12px;background:var(--leaf);color:#fff;font-weight:700;text-decoration:none;font-size:14px">Text</a>
+      <a href="${r.url}" target="_blank" style="flex:1;text-align:center;padding:13px;border-radius:12px;background:rgba(255,255,255,.14);color:#F6EAD3;font-weight:700;text-decoration:none;font-size:14px">Open</a>
+    </div>`;
+  overlay.querySelector("#sheetClose").onclick = () => overlay.remove();
+  document.body.appendChild(overlay);
+};
 
 // ── boot ──
 (async function init() {
