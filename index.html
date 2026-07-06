@@ -252,6 +252,19 @@ async function loadVisits(accountId) {
   } catch (e) {}
 }
 
+// Quietly grab GPS when a stop form opens; returns a getter for "lat,lng" (or "" if unavailable)
+function startGeo() {
+  let loc = "";
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      p => { loc = p.coords.latitude.toFixed(6) + "," + p.coords.longitude.toFixed(6); },
+      () => {},   // denied or unavailable — save proceeds without location
+      { enableHighAccuracy: true, timeout: 8000, maximumAge: 120000 }
+    );
+  }
+  return () => loc;
+}
+
 // ── NAV ──
 function go(v) { view = v; render(); }
 backBtn.onclick = () => {
@@ -589,11 +602,12 @@ function renderVisitForm() {
     </div>
   </div>`;
   const readVisit = wireVisitFields();
+  const getLoc = startGeo();
   document.getElementById("cancelVisit").onclick = () => backBtn.onclick();
   document.getElementById("saveVisit").onclick = async () => {
     const btn = document.getElementById("saveVisit");
     btn.disabled = true; btn.textContent = "Saving…";
-    const visit = Object.assign(readVisit(), { accountId: a.id, accountName: a.name });
+    const visit = Object.assign(readVisit(), { accountId: a.id, accountName: a.name, location: getLoc() });
     try {
       const r = await apiPost({ action:"addVisit", visit });
       if (r.error) throw new Error(r.error);
@@ -624,6 +638,7 @@ function renderNewCombo() {
   </div>`;
   const getType = wireTypeRow("Bar");
   const readVisit = wireVisitFields();
+  const getLoc = startGeo();
   document.getElementById("cancelCombo").onclick = () => backBtn.onclick();
   document.getElementById("saveCombo").onclick = async () => {
     const btn = document.getElementById("saveCombo");
@@ -635,7 +650,7 @@ function renderNewCombo() {
       if (r1.error || !r1.id) throw new Error(r1.error || "no id");
       acct.id = r1.id;
       accounts.push(acct); sortAccounts();
-      const visit = Object.assign(readVisit(), { accountId: acct.id, accountName: acct.name });
+      const visit = Object.assign(readVisit(), { accountId: acct.id, accountName: acct.name, location: getLoc() });
       const r2 = await apiPost({ action:"addVisit", visit });
       if (r2.error) throw new Error(r2.error);
       visitsByAccount[acct.id] = [visit];
