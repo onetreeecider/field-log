@@ -105,6 +105,21 @@
   .price-note { font-size:12px; color:var(--bark-soft); margin-top:2px; }
   .price-val { font-family:Fraunces,serif; font-weight:900; font-size:20px; color:var(--gold-deep); white-space:nowrap; margin-left:12px; }
 
+  .price-sec { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.16em;
+    color:var(--gold-deep); margin:18px 2px 10px; }
+  .pcard { background:var(--paper); border:1.5px solid var(--line); border-radius:20px; padding:18px;
+    margin-bottom:14px; box-shadow:0 4px 14px rgba(59,46,34,.08); }
+  .pcard-title { font-family:Fraunces,serif; font-weight:900; font-size:21px; margin-bottom:10px; }
+  .p-big { font-family:Fraunces,serif; font-weight:900; font-size:34px; color:var(--gold-deep); line-height:1; }
+  .p-big small { font-size:13px; font-family:Inter,sans-serif; font-weight:600; color:var(--bark-soft); letter-spacing:.05em; }
+  .p-stats { display:flex; gap:8px; margin:12px 0; flex-wrap:wrap; }
+  .p-stat { flex:1; min-width:86px; background:var(--gold-pale); border-radius:12px; padding:9px 10px; text-align:center; }
+  .p-stat .v { font-family:Fraunces,serif; font-weight:900; font-size:18px; color:var(--bark); }
+  .p-stat .k { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--bark-soft); margin-top:2px; }
+  .p-flavors { display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; }
+  .p-tier { padding:12px 0; border-top:1.5px dashed var(--line); }
+  .p-tier:first-of-type { border-top:none; padding-top:4px; }
+
   .empty { text-align:center; margin-top:50px; }
   .empty p:first-child { font-family:Fraunces,serif; font-size:20px; font-weight:700; }
   .empty p:last-child { font-size:14px; color:var(--bark-soft); margin-top:4px; }
@@ -664,18 +679,59 @@ async function renderPricing() {
     }
     if (view.name !== "pricing") return;
   }
-  let rows = "";
-  for (const p of pricing) {
-    rows += `<div class="price-row">
-      <div><div class="price-item">${esc(p.item)}</div>${p.notes ? `<div class="price-note">${esc(p.notes)}</div>` : ""}</div>
-      <div class="price-val">${p.price ? "$" + esc(p.price) : "—"}</div>
-    </div>`;
+  const money = (v) => v ? "$" + esc(String(v).replace(/^\$/, "")) : "";
+  const flavorChips = (s) => !s ? "" : `<div class="p-flavors">` +
+    String(s).split(",").map(f => f.trim()).filter(Boolean)
+      .map(f => `<span class="chip chip-leaf">${esc(f)}</span>`).join("") + `</div>`;
+
+  const packaged = pricing.filter(p => (p.section || "").toLowerCase().startsWith("pack"));
+  const draftRows = pricing.filter(p => (p.section || "").toLowerCase().startsWith("draft"));
+
+  let html = `<div class="page"><h2 style="margin-bottom:2px">Pricing</h2>`;
+
+  if (packaged.length) {
+    html += `<div class="price-sec">Packaged</div>`;
+    for (const p of packaged) {
+      const stats = [
+        p.perPkg ? `<div class="p-stat"><div class="v">${money(p.perPkg)}</div><div class="k">Per pack</div></div>` : "",
+        p.perCan ? `<div class="p-stat"><div class="v">${money(p.perCan)}</div><div class="k">Per can</div></div>` : "",
+        p.srp    ? `<div class="p-stat"><div class="v">${money(p.srp)}</div><div class="k">SRP</div></div>` : "",
+      ].join("");
+      html += `<div class="pcard">
+        <div class="pcard-title">${esc(p.pkg)}</div>
+        ${p.casePrice ? `<div class="p-big">${money(p.casePrice)} <small>/ CASE</small></div>` : ""}
+        ${stats ? `<div class="p-stats">${stats}</div>` : ""}
+        ${flavorChips(p.flavors)}
+      </div>`;
+    }
   }
-  app.innerHTML = `<div class="page">
-    <h2 style="margin-bottom:4px">Pricing</h2>
-    <p class="muted" style="font-size:13px;margin-bottom:10px">Prices come straight from the Pricing tab in the spreadsheet.</p>
-    <div class="card" style="padding:4px 14px">${rows || `<div class="spinner">No prices yet — add rows to the Pricing tab in the Sheet.</div>`}</div>
-  </div>`;
+
+  if (draftRows.length) {
+    html += `<div class="price-sec">Draft</div>`;
+    // group tiers by package, preserving sheet order
+    const order = [], groups = {};
+    for (const p of draftRows) {
+      if (!groups[p.pkg]) { groups[p.pkg] = []; order.push(p.pkg); }
+      groups[p.pkg].push(p);
+    }
+    for (const pkg of order) {
+      html += `<div class="pcard"><div class="pcard-title">${esc(pkg)}</div>`;
+      for (const t of groups[pkg]) {
+        if (!t.tier && !t.flavors) continue;
+        html += `<div class="p-tier">
+          ${t.tier ? `<div class="p-big">${money(t.tier)}</div>` : ""}
+          ${flavorChips(t.flavors)}
+        </div>`;
+      }
+      html += `</div>`;
+    }
+  }
+
+  if (!packaged.length && !draftRows.length) {
+    html += `<div class="card muted" style="font-size:14px;margin-top:12px">No prices yet — fill in the Pricing tab in the spreadsheet.</div>`;
+  }
+  html += `</div>`;
+  app.innerHTML = html;
 }
 
 // ── boot ──
